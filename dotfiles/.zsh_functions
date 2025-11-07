@@ -1,0 +1,217 @@
+# ZSH Functions
+# This file contains custom shell functions
+
+# ============================================================================
+# Directory Navigation
+# ============================================================================
+
+# Create a directory and cd into it
+mkcd() {
+    if [ -z "$1" ]; then
+        echo "Usage: mkcd <directory>"
+        return 1
+    fi
+    mkdir -p "$1" && cd "$1"
+}
+
+# Go up N directories
+up() {
+    local d=""
+    local limit="${1:-1}"
+    for ((i=1; i<=limit; i++)); do
+        d="../$d"
+    done
+    cd "$d" || return
+}
+
+# ============================================================================
+# File Operations
+# ============================================================================
+
+# Extract various archive types
+extract() {
+    if [ -z "$1" ]; then
+        echo "Usage: extract <archive_file>"
+        return 1
+    fi
+
+    if [ ! -f "$1" ]; then
+        echo "Error: '$1' is not a valid file"
+        return 1
+    fi
+
+    case "$1" in
+        *.tar.gz|*.tgz)  tar xzf "$1"     ;;
+        *.tar.bz2|*.tbz) tar xjf "$1"     ;;
+        *.tar.xz)        tar xJf "$1"     ;;
+        *.tar)           tar xf "$1"      ;;
+        *.gz)            gunzip "$1"      ;;
+        *.bz2)           bunzip2 "$1"     ;;
+        *.zip)           unzip "$1"       ;;
+        *.Z)             uncompress "$1"  ;;
+        *.7z)            7z x "$1"        ;;
+        *.rar)           unrar x "$1"     ;;
+        *)               echo "Error: '$1' cannot be extracted via extract()" ;;
+    esac
+}
+
+# Get file size
+fsize() {
+    if [ -z "$1" ]; then
+        echo "Usage: fsize <file_or_directory>"
+        return 1
+    fi
+    du -sh "$1"
+}
+
+# ============================================================================
+# Git Functions
+# ============================================================================
+
+# Git commit with automatic message generation based on changes
+gac() {
+    git add --all
+    if [ -z "$1" ]; then
+        git commit
+    else
+        git commit -m "$1"
+    fi
+}
+
+# Clone a repo and cd into it
+gclone() {
+    if [ -z "$1" ]; then
+        echo "Usage: gclone <repository_url>"
+        return 1
+    fi
+    git clone "$1" && cd "$(basename "$1" .git)" || return
+}
+
+# Create a new git branch and switch to it
+gnb() {
+    if [ -z "$1" ]; then
+        echo "Usage: gnb <branch_name>"
+        return 1
+    fi
+    git checkout -b "$1"
+}
+
+# Git status for all repos in subdirectories
+gstatus-all() {
+    find . -name ".git" -type d -maxdepth 2 | while read -r gitdir; do
+        dir=$(dirname "$gitdir")
+        echo "Repository: $dir"
+        git -C "$dir" status -s
+        echo ""
+    done
+}
+
+# ============================================================================
+# Development Functions
+# ============================================================================
+
+# Create a Python virtual environment and activate it
+venv() {
+    local venv_name="${1:-.venv}"
+    python3 -m venv "$venv_name"
+    source "$venv_name/bin/activate"
+}
+
+# Find a process using a specific port
+port() {
+    if [ -z "$1" ]; then
+        echo "Usage: port <port_number>"
+        return 1
+    fi
+    lsof -i :"$1"
+}
+
+# Kill process on a specific port
+killport() {
+    if [ -z "$1" ]; then
+        echo "Usage: killport <port_number>"
+        return 1
+    fi
+    lsof -ti:"$1" | xargs kill -9
+}
+
+# ============================================================================
+# System Functions
+# ============================================================================
+
+# Show disk usage in human readable format
+diskusage() {
+    df -h | grep -v "tmpfs\|devtmpfs\|loop"
+}
+
+# Find large files in current directory
+findlarge() {
+    local size="${1:-100M}"
+    find . -type f -size +"$size" -exec ls -lh {} \; 2>/dev/null | awk '{ print $9 ": " $5 }'
+}
+
+# Weather function (requires curl)
+weather() {
+    local location="${1:-}"
+    curl -s "wttr.in/${location}?format=3"
+}
+
+# ============================================================================
+# Utility Functions
+# ============================================================================
+
+# Create a backup of a file with timestamp
+backup() {
+    if [ -z "$1" ]; then
+        echo "Usage: backup <file>"
+        return 1
+    fi
+    cp "$1" "${1}.backup.$(date +%Y%m%d%H%M%S)"
+}
+
+# Quick web server for current directory
+serve() {
+    local port="${1:-8000}"
+    python3 -m http.server "$port"
+}
+
+# Generate a random password
+genpass() {
+    local length="${1:-16}"
+    LC_ALL=C tr -dc 'A-Za-z0-9!@#$%^&*' < /dev/urandom | head -c "$length" && echo
+}
+
+# Convert JSON to readable format
+json() {
+    if [ -z "$1" ]; then
+        python3 -m json.tool
+    else
+        python3 -m json.tool < "$1"
+    fi
+}
+
+# ============================================================================
+# 1Password Functions (requires 1password-cli)
+# ============================================================================
+
+# Quick signin to 1Password
+opsignin() {
+    if command -v op &> /dev/null; then
+        eval $(op signin)
+    else
+        echo "1Password CLI not installed"
+    fi
+}
+
+# Get password from 1Password
+opget() {
+    if [ -z "$1" ]; then
+        echo "Usage: opget <item_name>"
+        return 1
+    fi
+    if command -v op &> /dev/null; then
+        op item get "$1" --fields password
+    else
+        echo "1Password CLI not installed"
+    fi
+}

@@ -1,0 +1,102 @@
+# ZSH Aliases
+# This file contains command aliases for frequently used commands
+
+# ============================================================================
+# Navigation
+# ============================================================================
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias ~='cd ~'
+
+# ============================================================================
+# List Directory Contents
+# ============================================================================
+# Use eza (modern ls) if available, otherwise fallback to ls
+if command -v eza &> /dev/null; then
+    alias ls='eza --color=auto --icons'
+    alias ll='eza -lah --icons --git'
+    alias la='eza -a --icons'
+    alias lt='eza --tree --level=2 --icons'
+    alias lta='eza --tree --level=2 -a --icons'
+else
+    alias ls='ls -G'
+    alias ll='ls -lah'
+    alias la='ls -A'
+fi
+
+# ============================================================================
+# File Operations
+# ============================================================================
+alias cp='cp -iv'
+alias mv='mv -iv'
+alias rm='rm -iv'
+alias mkdir='mkdir -pv'
+
+# ============================================================================
+# Git Aliases
+# ============================================================================
+alias g='git'
+alias gs='git status'
+alias ga='git add'
+alias gaa='git add --all'
+alias gc='git commit'
+alias gcm='git commit -m'
+alias gp='git push'
+alias gpl='git pull'
+alias gco='git checkout'
+alias gcb='git checkout -b'
+alias gb='git branch'
+alias gd='git diff'
+alias gl='git log --oneline --graph --decorate'
+alias glog='git log --oneline --graph --decorate --all'
+
+# ============================================================================
+# Development
+# ============================================================================
+alias py='python3'
+alias python='python3'
+alias pip='pip3'
+alias nv='nvim'
+alias vim='nvim'
+alias vi='nvim'
+
+# ============================================================================
+# System
+# ============================================================================
+alias h='history'
+alias c='clear'
+alias path='echo $PATH | tr ":" "\n"'
+alias reload='source ~/.zshrc'
+
+# ============================================================================
+# Network
+# ============================================================================
+alias myip='curl -s ifconfig.me'
+alias localip='ipconfig getifaddr en0'
+
+# ============================================================================
+# Homebrew
+# ============================================================================
+alias brewup='brew update && brew upgrade && brew cleanup'
+alias brewlist='brew list && brew list --cask'
+
+# ============================================================================
+# Search and Find
+# ============================================================================
+# Use ripgrep if available
+if command -v rg &> /dev/null; then
+    alias grep='rg'
+fi
+
+# Use bat (better cat) if available
+if command -v bat &> /dev/null; then
+    alias cat='bat --style=auto'
+fi
+
+# ============================================================================
+# macOS Specific
+# ============================================================================
+alias showfiles='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder'
+alias hidefiles='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder'
+alias cleanup='find . -type f -name "*.DS_Store" -ls -delete'

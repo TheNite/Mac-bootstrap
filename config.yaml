@@ -1,0 +1,106 @@
+# macOS Setup Configuration
+# Edit this file to customize your macOS setup
+
+# Homebrew Formulae (CLI tools)
+brew_formulae:
+  - git
+  - gh  # GitHub CLI
+  - golang
+  - node
+  - python  # Latest version
+  - terraform
+  - neovim
+  - 1password-cli
+  - dockutil  # Dock management utility
+  - ripgrep
+  - fzf
+  - bat
+  - eza
+  - tmux
+  - wget
+  - jq
+
+brew_fonts:
+  - font-jetbrains-mono-nerd-font  # Required for NvChad
+
+# Homebrew Casks (GUI applications)
+brew_casks:
+  # Browsers - NEVER install via Homebrew (install manually from vendor websites)
+  # Firefox: https://www.firefox.com/
+  # Chrome: https://www.google.com/chrome/
+  # Brave: https://brave.com/
+
+  # Development
+  - iterm2
+  - visual-studio-code
+  - sublime-text
+  - jetbrains-toolbox
+  - docker
+  - bruno  # API client
+
+  # Productivity
+  - 1password
+  # - slack  # Uncomment if needed
+  # - notion  # Uncomment if needed
+
+  # Media
+  # - vlc  # Uncomment if needed
+  # - spotify  # Uncomment if needed
+
+# Dock Configuration
+dock:
+  # Apps in dock (in order from left to right)
+  # Note: Finder is always first, these come after
+  apps:
+    - Apps
+    - Firefox
+    - PyCharm
+    - Messages
+    - System Settings
+    - 1Password
+    - Discord
+    - iTerm2
+    - Sublime Text
+  # Dock settings
+  tile_size: 36
+  autohide: true
+  show_recents: false
+
+# Finder Preferences
+finder:
+  default_view: "list"  # Options: icon, list, column, gallery
+  show_path_bar: true
+  show_status_bar: true
+  show_hidden_files: false
+
+# System Preferences
+system:
+  # Keyboard
+  key_repeat_rate: 2  # Lower is faster (1-2 recommended)
+  initial_key_repeat: 15  # Lower is faster (10-15 recommended)
+
+  # Trackpad
+  tap_to_click: true
+  tracking_speed: 1.5  # 0.0 to 3.0
+
+  # Text
+  disable_auto_correct: false
+  disable_auto_capitalize: false
+
+  # Screenshots
+  screenshot_location: "~/Desktop/Screenshots"
+  screenshot_show_thumbnail: false
+
+# Git Configuration
+git:
+  default_branch: "main"
+  # Uncomment and set these
+  # user_name: "Your Name"
+  # user_email: "your.email@example.com"
+
+# Optional: Additional setup steps
+optional:
+  install_oh_my_zsh: true
+  install_nvchad: true  # Neovim configuration framework
+  install_vim_plug: false
+  copy_dotfiles: true  # Copy zsh aliases and functions
