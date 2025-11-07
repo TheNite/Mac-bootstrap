@@ -13,8 +13,13 @@ Apps included:
 - Media: VLC, Handbrake (video converter)
 - Remote/Network: AnyDesk, Cyberduck (FTP/SFTP), Wireshark
 - System Tools: balenaEtcher (USB imaging)
+
+Usage:
+    ./install_personal_apps.py        # Interactive mode (asks for confirmation)
+    ./install_personal_apps.py -y     # Skip confirmation prompt
 """
 
+import argparse
 import sys
 from pathlib import Path
 
@@ -85,6 +90,17 @@ def install_personal_apps():
 
 def main():
     """Main execution"""
+    parser = argparse.ArgumentParser(
+        description="Install personal/non-professional applications",
+        formatter_class=argparse.RawDescriptionHelpFormatter
+    )
+    parser.add_argument(
+        "-y", "--yes",
+        action="store_true",
+        help="Skip confirmation prompt and install automatically"
+    )
+    args = parser.parse_args()
+
     print("=" * 60)
     print("  Personal Applications Installation")
     print("=" * 60)
@@ -94,10 +110,12 @@ def main():
         print(f"  - {app}")
     print()
 
-    response = input("Continue? (y/n): ")
-    if response.lower() != 'y':
-        Logger.info("Installation cancelled")
-        return
+    # Skip confirmation if -y flag is provided
+    if not args.yes:
+        response = input("Continue? (y/n): ")
+        if response.lower() != 'y':
+            Logger.info("Installation cancelled")
+            return
 
     if not install_personal_apps():
         sys.exit(1)

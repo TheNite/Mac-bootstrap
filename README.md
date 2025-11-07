@@ -28,6 +28,7 @@ Automated setup tool for configuring a fresh macOS installation with your prefer
 2. **Run the bootstrap script** (handles all prerequisites):
    ```bash
    ./bootstrap.sh
+   # Or for automated waiting: ./bootstrap.sh --non-interactive
    ```
    This will:
    - Install Command Line Tools (if needed)
@@ -55,6 +56,32 @@ git pull
 ```
 
 **Note**: The setup automatically skips already-installed packages, making re-runs fast and safe.
+
+## Interactive Steps
+
+### During Bootstrap (bootstrap.sh)
+
+**Interactive Mode** (default):
+- Command Line Tools: Opens dialog → Click "Install" → Press Enter when done
+
+**Non-Interactive Mode** (automatic polling):
+```bash
+./bootstrap.sh --non-interactive
+```
+- Command Line Tools: Opens dialog → Automatically waits for installation to complete
+
+### During Setup (setup.py)
+
+- **Sudo password**: Required at the start (caches for duration of script)
+- **Homebrew installations**: Some may ask for confirmation
+- **All package installations**: Automated with skip checks
+
+### After Setup (Manual Steps)
+
+- **NvChad**: First `nvim` run installs plugins interactively
+- **1Password**: Manual sign-in required
+- **Browsers**: Manual download/install from vendor websites
+- **Personal apps**: Run `./scripts/install_personal_apps.py -y` (use `-y` to skip confirmation)
 
 ## Configuration
 
@@ -116,14 +143,20 @@ finder:
 
 ### System Preferences
 
+**By default, all system preferences are kept at macOS defaults.**
+
+If you want to customize system settings, uncomment the `system:` section in `config.yaml`:
+
 ```yaml
-system:
-  key_repeat_rate: 2  # Faster is lower (1-2 recommended)
-  initial_key_repeat: 15
-  tap_to_click: true
-  tracking_speed: 1.5
-  screenshot_location: "~/Desktop/Screenshots"
+# system:
+#   key_repeat_rate: 2  # Faster is lower (1-2 recommended)
+#   initial_key_repeat: 15
+#   tap_to_click: true
+#   tracking_speed: 1.5
+#   screenshot_location: "~/Desktop/Screenshots"
 ```
+
+**Recommendation**: Configure these manually through System Settings to avoid unexpected behavior.
 
 ### Git Configuration
 
@@ -179,6 +212,7 @@ Each component can be run independently:
 
 # Install personal apps (Gaming, utilities, media, network tools - 14 apps total)
 ./scripts/install_personal_apps.py
+# Or skip confirmation: ./scripts/install_personal_apps.py -y
 
 # Configure Dock only
 ./scripts/configure_dock.py

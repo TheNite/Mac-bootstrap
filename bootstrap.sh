@@ -1,14 +1,30 @@
 #!/usr/bin/env bash
 # Bootstrap Script
 # Run this first on a fresh macOS install to set up prerequisites
-# Usage: ./bootstrap.sh
+# Usage: ./bootstrap.sh [--non-interactive]
 
 set -e  # Exit on error
+
+# Parse arguments
+NON_INTERACTIVE=false
+for arg in "$@"; do
+    case $arg in
+        --non-interactive|-n)
+            NON_INTERACTIVE=true
+            shift
+            ;;
+    esac
+done
 
 echo "========================================"
 echo "  macOS Setup - Bootstrap"
 echo "========================================"
 echo ""
+
+if [[ "$NON_INTERACTIVE" == true ]]; then
+    echo "Running in non-interactive mode"
+    echo ""
+fi
 
 # Colors for output
 RED='\033[0;31m'
@@ -34,9 +50,20 @@ else
     echo "NOTE: A dialog will appear. Please click 'Install' and wait for completion."
     xcode-select --install
     echo ""
-    echo "Waiting for Command Line Tools installation to complete..."
-    echo "Press Enter after the installation finishes..."
-    read -r
+
+    if [[ "$NON_INTERACTIVE" == true ]]; then
+        # Auto-wait by polling for installation
+        echo "Waiting for Command Line Tools installation (checking every 5 seconds)..."
+        while ! xcode-select -p &>/dev/null; do
+            sleep 5
+        done
+        echo -e "${GREEN}[OK]${NC} Command Line Tools installed"
+    else
+        # Interactive mode - wait for user confirmation
+        echo "Waiting for Command Line Tools installation to complete..."
+        echo "Press Enter after the installation finishes..."
+        read -r
+    fi
 fi
 echo ""
 

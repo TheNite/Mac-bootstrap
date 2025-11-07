@@ -17,9 +17,15 @@ from utils import Logger, load_config
 def configure_system():
     """Configure system preferences"""
     config = load_config()
-    Logger.info("Configuring system preferences...")
 
     system_config = config.get('system', {})
+
+    # Skip if no system config is defined
+    if not system_config:
+        Logger.info("No system preferences configured (keeping macOS defaults)")
+        return True
+
+    Logger.info("Configuring system preferences...")
 
     try:
         # Keyboard settings

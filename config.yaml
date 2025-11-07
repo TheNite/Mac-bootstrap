@@ -74,22 +74,24 @@ finder:
   show_hidden_files: false
 
 # System Preferences
-system:
-  # Keyboard
-  key_repeat_rate: 2  # Lower is faster (1-2 recommended)
-  initial_key_repeat: 15  # Lower is faster (10-15 recommended)
-
-  # Trackpad
-  tap_to_click: true
-  tracking_speed: 1.5  # 0.0 to 3.0
-
-  # Text
-  disable_auto_correct: false
-  disable_auto_capitalize: false
-
-  # Screenshots
-  screenshot_location: "~/Desktop/Screenshots"
-  screenshot_show_thumbnail: false
+# NOTE: All system settings are commented out to keep macOS defaults
+# Uncomment and customize only if you want to override system preferences
+# system:
+#   # Keyboard
+#   key_repeat_rate: 2  # Lower is faster (1-2 recommended)
+#   initial_key_repeat: 15  # Lower is faster (10-15 recommended)
+#
+#   # Trackpad
+#   tap_to_click: true
+#   tracking_speed: 1.5  # 0.0 to 3.0
+#
+#   # Text
+#   disable_auto_correct: false
+#   disable_auto_capitalize: false
+#
+#   # Screenshots
+#   screenshot_location: "~/Desktop/Screenshots"
+#   screenshot_show_thumbnail: false
 
 # Git Configuration
 git:

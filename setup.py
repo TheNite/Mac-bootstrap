@@ -82,6 +82,15 @@ class SetupOrchestrator:
         print("═" * 60)
         print()
 
+        # Display interactive steps warning
+        Logger.warning("INTERACTIVE STEPS REQUIRED:")
+        print("  • Sudo password (required upfront)")
+        print("  • Some installations may ask for confirmation")
+        print()
+        print("  Automated installations will proceed automatically.")
+        print("  See README.md for post-setup manual steps (browsers, NvChad, etc.)")
+        print()
+
         # Ask for sudo password upfront
         Logger.info("This script requires sudo access...")
         subprocess.run(["sudo", "-v"], check=True)
